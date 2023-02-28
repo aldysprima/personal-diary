@@ -1,6 +1,6 @@
 import http from "./axios";
 
-class apiRepository {
+class ApiRepository {
   async login(data) {
     return http.post("/auth/login", data);
   }
@@ -9,4 +9,4 @@ class apiRepository {
   }
 }
 
-export default apiRepository;
+export default ApiRepository;

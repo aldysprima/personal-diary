@@ -11,14 +11,15 @@ import {
 } from "@mui/material";
 import { VisibilityOff, Visibility } from "@mui/icons-material";
 import { toast } from "react-toastify";
+import { authStore } from "../store";
 
 const Login = () => {
   const navigate = useNavigate();
   const email = useRef();
   const password = useRef();
 
-  // // import reducer
-  // const { isLoading, login } = store((state) => state);
+  // import from global state
+  const { isLoading, login } = authStore((state) => state);
   // Toggle Visibility
   const [visible, setVisible] = useState(false);
   const showPassword = () => {
@@ -32,11 +33,11 @@ const Login = () => {
   // Handle login
   const handleLogin = () => {
     const data = {
-      user: email.current.value,
+      email: email.current.value,
       password: password.current.value,
     };
 
-    // login(data, navigate, toast);
+    login(data, navigate, toast);
   };
 
   useEffect(() => {
@@ -103,6 +104,7 @@ const Login = () => {
                 backgroundColor: "#200B36",
               },
             }}
+            disabled={isLoading ? true : false}
           >
             Login
           </Button>

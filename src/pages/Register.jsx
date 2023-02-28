@@ -1,5 +1,47 @@
-import { Stack, Box, Typography, TextField, Button } from "@mui/material";
+import Axios from "axios";
+import { useRef, useState } from "react";
+import {
+  Stack,
+  Box,
+  Typography,
+  TextField,
+  Button,
+  InputAdornment,
+  IconButton,
+} from "@mui/material";
+import { authStore } from "../store";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 const Register = () => {
+  //init navigate
+  const navigate = useNavigate();
+  // Destruct from global store
+  const { isLoading, register } = authStore((state) => state);
+  // Hold user input
+  const emailRef = useRef();
+  const usernameRef = useRef();
+  const passRef = useRef();
+  const confirmPassRef = useRef();
+  // Toggle Visibility
+  const [visible, setVisible] = useState(false);
+  const showPassword = () => {
+    if (!visible) {
+      setVisible(true);
+    } else {
+      setVisible(false);
+    }
+  };
+  // handle register
+  const handleRegister = () => {
+    const data = {
+      email: emailRef.current.value,
+      username: usernameRef.current.value,
+      password: passRef.current.value,
+      password_confirmation: confirmPassRef.current.value,
+    };
+    register(data, toast, navigate);
+  };
   return (
     <Box
       display="flex"
@@ -25,11 +67,41 @@ const Register = () => {
           </Typography>
         </Stack>
         <Stack flex={1} padding="10px 20px" justifyContent="center" spacing={2}>
-          <TextField label="Email" size="small" type="email" />
-          <TextField label="Username" size="small" />
-          <TextField label="Password" size="small" />
-          <TextField label="Confirm Password" size="small" />
-          <Button variant="outlined">Register</Button>
+          <TextField
+            label="Email"
+            size="small"
+            type="email"
+            inputRef={emailRef}
+          />
+          <TextField label="Username" size="small" inputRef={usernameRef} />
+          <TextField
+            label="Password"
+            type={visible ? "text" : "password"}
+            size="small"
+            inputRef={passRef}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={showPassword}>
+                    {visible ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+          <TextField
+            label="Confirm Password"
+            size="small"
+            inputRef={confirmPassRef}
+            type={visible ? "text" : "password"}
+          />
+          <Button
+            variant="outlined"
+            onClick={handleRegister}
+            disabled={isLoading ? true : false}
+          >
+            Register
+          </Button>
         </Stack>
       </Box>
     </Box>
