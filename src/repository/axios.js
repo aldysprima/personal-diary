@@ -16,7 +16,7 @@ if (localStorage.userToken) {
         ? localStorage.getItem("userToken")
         : "";
       config.headers = {
-        authorization: token,
+        Authorization: `Bearer ${token}`,
       };
       return config;
     },

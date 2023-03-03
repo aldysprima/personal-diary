@@ -1,5 +1,6 @@
 import create from "zustand";
 import ApiRepository from "../repository/api";
+import { toast } from "react-toastify";
 
 const apiRepository = new ApiRepository();
 
@@ -9,15 +10,15 @@ export const authStore = create((set) => ({
   login: async (data, navigate, toast) => {
     set({ isLoading: true });
     try {
-      const response = await ApiRepository.login(data);
-      set({ user: await response.data });
-      const token = await response.headers.authorization.split(" ")[1];
+      const response = await apiRepository.login(data);
+      console.log(response);
+      set({ user: await response.data.user, isLoading: false });
+      const token = await response.data.access_token;
       localStorage.setItem("userToken", token);
-      set({ isLoading: false });
-      navigate("/job-list");
-      toast.success("Login Succed");
+      navigate("/note-list");
+      toast.success("Login Succeed");
     } catch (error) {
-      toast.error(error?.response?.data);
+      toast.error(error?.response?.data?.message);
       set({ isLoading: false });
     }
   },
@@ -32,6 +33,24 @@ export const authStore = create((set) => ({
       set({ isLoading: false });
       console.log(error);
       toast.error(error?.response?.data?.message);
+    }
+  },
+}));
+
+export const noteStore = create((set) => ({
+  isLoading: false,
+  notes: [],
+  fetchNotes: async (keyword) => {
+    set({ isLoading: true });
+    try {
+      const response = await apiRepository.getNoteList(keyword);
+      set({ notes: await response.data.data, isLoading: false });
+    } catch (error) {
+      set({ isLoading: false });
+      toast.error(
+        error?.response?.data?.message ||
+          "Oops something wrong. Dont worry, we will fix it"
+      );
     }
   },
 }));

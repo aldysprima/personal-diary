@@ -11,6 +11,7 @@ import {
   Typography,
 } from "@mui/material";
 import { toast } from "react-toastify";
+import { authStore } from "../store";
 
 const StyledToolbar = styled(Toolbar)({
   display: "flex",
@@ -23,11 +24,12 @@ const Icons = styled(Box)(({ theme }) => ({
   alignItems: "center",
 }));
 
-function Navbar({ user }) {
+function Navbar() {
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const divRef = useRef();
   const navigate = useNavigate();
+  const user = authStore((state) => state.user);
 
   const onOpen = () => {
     setOpen(true);

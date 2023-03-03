@@ -7,6 +7,9 @@ class ApiRepository {
   async register(data) {
     return http.post("/auth/register", data);
   }
+  async getNoteList(keyword = "") {
+    return http.get(`/diary?search=${keyword}`);
+  }
 }
 
 export default ApiRepository;

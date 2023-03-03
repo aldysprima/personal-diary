@@ -8,6 +8,7 @@ import {
   Stack,
   TextField,
   Typography,
+  CircularProgress,
 } from "@mui/material";
 import { VisibilityOff, Visibility } from "@mui/icons-material";
 import { toast } from "react-toastify";
@@ -106,7 +107,7 @@ const Login = () => {
             }}
             disabled={isLoading ? true : false}
           >
-            Login
+            {isLoading ? <CircularProgress /> : "login"}
           </Button>
           <Typography>
             Don't have account yet? <Link to="/register">Sign Up</Link>
