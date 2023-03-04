@@ -8,7 +8,7 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@mui/material";
-import { Archive, Note, StickyNote2 } from "@mui/icons-material";
+import { Archive, StickyNote2 } from "@mui/icons-material";
 
 function Sidebar() {
   return (
@@ -17,7 +17,7 @@ function Sidebar() {
         <List>
           <NavLink>
             <ListItem disablePadding>
-              <ListItemButton component="a">
+              <ListItemButton>
                 <ListItemIcon>
                   <StickyNote2 />
                 </ListItemIcon>
@@ -27,7 +27,7 @@ function Sidebar() {
           </NavLink>
           <NavLink>
             <ListItem disablePadding>
-              <ListItemButton component="a">
+              <ListItemButton>
                 <ListItemIcon>
                   <Archive />
                 </ListItemIcon>
