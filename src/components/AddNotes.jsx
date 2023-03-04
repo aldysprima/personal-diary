@@ -1,6 +1,6 @@
+import { useState } from "react";
 import {
   Add,
-  DateRange,
   EmojiEmotions,
   Image,
   PersonAdd,
@@ -10,7 +10,6 @@ import {
   Avatar,
   Box,
   Button,
-  ButtonGroup,
   Fab,
   Modal,
   Stack,
@@ -19,7 +18,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import { noteStore } from "../store";
 
 const StyledModal = styled(Modal)({
   display: "flex",
@@ -35,13 +34,24 @@ const UserBox = styled(Box)({
 });
 
 function AddPost() {
+  const { postNotes, isLoading, fetchNotes } = noteStore((state) => state);
   const [open, setOpen] = useState(false);
+  const [data, setData] = useState({});
+  const handleChange = (e) => {
+    setData({
+      ...data,
+      [e.target.name]: e.target.value,
+    });
+  };
+  const onBtnSubmit = () => {
+    postNotes(data, setOpen, fetchNotes);
+  };
   return (
     <>
       <Tooltip
         onClick={(e) => setOpen(true)}
-        title="Add Post"
-        sx={{ position: "fixed", bottom: 20, left: 30 }}
+        title="Add Notes"
+        sx={{ position: "fixed", bottom: 50, right: 100 }}
       >
         <Fab color="primary" aria-label="add">
           <Add />
@@ -53,32 +63,33 @@ function AddPost() {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box
-          height="300px"
-          width="400px"
-          bgcolor="white"
-          borderRadius={5}
-          p={3}
-        >
+        <Box width="400px" bgcolor="white" borderRadius={5} p={3}>
           <Typography variant="h6" color="gray" textAlign="center">
-            Create Post
+            Create New Diary Notes
           </Typography>
           <UserBox>
-            <Avatar
-              src="https://images.pexels.com/photos/846741/pexels-photo-846741.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-              sx={{ width: 30, height: 30 }}
-            />
-            <Typography fontweight={500} variant="span">
+            <Avatar src="" sx={{ width: 30, height: 30 }} />
+            <Typography fontWeight={500} variant="span">
               John Doe
             </Typography>
           </UserBox>
           <TextField
             sx={{ width: "100%" }}
             id="standard-multiline-static"
-            multiline
-            rows={3}
-            placeholder="What's on Your Mind?"
+            placeholder="Title"
             variant="standard"
+            name="title"
+            onChange={handleChange}
+          />
+          <TextField
+            sx={{ width: "100%" }}
+            id="standard-multiline-static"
+            multiline
+            rows={5}
+            placeholder="Content"
+            variant="standard"
+            name="content"
+            onChange={handleChange}
           />
           <Stack direction="row" gap={1} mt={2} mb={3}>
             <EmojiEmotions color="primary" />
@@ -86,16 +97,10 @@ function AddPost() {
             <VideoCameraBack color="success" />
             <PersonAdd color="error" />
           </Stack>
-          <ButtonGroup
-            fullWidth
-            variant="contained"
-            aria-label="outlined primary button group"
-          >
-            <Button>Post</Button>
-            <Button sx={{ width: "100px" }}>
-              <DateRange />
-            </Button>
-          </ButtonGroup>
+
+          <Button variant="contained" fullWidth onClick={onBtnSubmit}>
+            Post
+          </Button>
         </Box>
       </StyledModal>
     </>

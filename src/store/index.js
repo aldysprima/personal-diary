@@ -92,13 +92,50 @@ export const noteStore = create((set) => ({
       );
     }
   },
-  postNotes: async (data) => {
+  postNotes: async (data, setOpen, fetchNotes) => {
     set({ isLoading: true });
     try {
       await Axios.post("/diary", data, {
         headers: generateHeadersConfig(),
       });
       set({ isLoading: false });
+      fetchNotes();
+      setOpen(false);
+      toast.success("Diary Note added successfully");
+    } catch (error) {
+      toast.error(
+        error?.response?.data?.message ||
+          "Oops something wrong. Dont worry, we will fix it"
+      );
+      set({ isLoading: false });
+    }
+  },
+  archieveNotes: async (id, setOpen, fetchNotes) => {
+    set({ isLoading: true });
+    try {
+      await Axios.put(`/diary/${id}/archieve`, "", {
+        headers: generateHeadersConfig(),
+      });
+      set({ isLoading: false });
+      toast.success("Diary Notes Archieved Successfully");
+      setOpen(false);
+      fetchNotes();
+    } catch (error) {
+      toast.error(
+        error?.response?.data?.message ||
+          "Oops something wrong. Dont worry, we will fix it"
+      );
+      set({ isLoading: false });
+    }
+  },
+  unarchieveNotes: async (id) => {
+    set({ isLoading: true });
+    try {
+      await Axios.put(`/diary/${id}/unarchieve`, data, {
+        headers: generateHeadersConfig(),
+      });
+      set({ isLoading: false });
+      toast.success("Diary Notes unarchieved Successfully");
     } catch (error) {
       toast.error(
         error?.response?.data?.message ||
