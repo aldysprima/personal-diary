@@ -7,6 +7,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/diary": "https://diary-test.ifdenewhallaid.com",
+      "/auth": "https://diary-test.ifdenewhallaid.com",
     },
   },
 });

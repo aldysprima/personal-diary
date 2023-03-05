@@ -1,5 +1,6 @@
-import Axios from "axios";
 import { useRef, useState } from "react";
+import { useFormik } from "formik";
+import { validateRegister } from "../utils/validationSchema";
 import {
   Stack,
   Box,
@@ -14,15 +15,22 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 const Register = () => {
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      username: "",
+      password: "",
+      password_confirmation: "",
+    },
+    validationSchema: validateRegister,
+    onSubmit: (values) => {
+      register(values, toast, navigate);
+    },
+  });
   //init navigate
   const navigate = useNavigate();
   // Destruct from global store
   const { isLoading, register } = authStore((state) => state);
-  // Hold user input
-  const emailRef = useRef();
-  const usernameRef = useRef();
-  const passRef = useRef();
-  const confirmPassRef = useRef();
   // Toggle Visibility
   const [visible, setVisible] = useState(false);
   const showPassword = () => {
@@ -32,16 +40,7 @@ const Register = () => {
       setVisible(false);
     }
   };
-  // handle register
-  const handleRegister = () => {
-    const data = {
-      email: emailRef.current.value,
-      username: usernameRef.current.value,
-      password: passRef.current.value,
-      password_confirmation: confirmPassRef.current.value,
-    };
-    register(data, toast, navigate);
-  };
+
   return (
     <Box
       display="flex"
@@ -67,41 +66,69 @@ const Register = () => {
           </Typography>
         </Stack>
         <Stack flex={1} padding="10px 20px" justifyContent="center" spacing={2}>
-          <TextField
-            label="Email"
-            size="small"
-            type="email"
-            inputRef={emailRef}
-          />
-          <TextField label="Username" size="small" inputRef={usernameRef} />
-          <TextField
-            label="Password"
-            type={visible ? "text" : "password"}
-            size="small"
-            inputRef={passRef}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton onClick={showPassword}>
-                    {visible ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          />
-          <TextField
-            label="Confirm Password"
-            size="small"
-            inputRef={confirmPassRef}
-            type={visible ? "text" : "password"}
-          />
-          <Button
-            variant="outlined"
-            onClick={handleRegister}
-            disabled={isLoading ? true : false}
-          >
-            Register
-          </Button>
+          <Stack component="form" onSubmit={formik.handleSubmit} spacing={2}>
+            <TextField
+              label="Email"
+              size="small"
+              name="email"
+              value={formik.values.email}
+              onChange={formik.handleChange}
+              error={formik.touched.email && Boolean(formik.errors.email)}
+              helperText={formik.touched.email && formik.errors.email}
+            />
+            <TextField
+              label="Username"
+              size="small"
+              name="username"
+              value={formik.values.username}
+              onChange={formik.handleChange}
+              error={formik.touched.username && Boolean(formik.errors.username)}
+              helperText={formik.touched.username && formik.errors.username}
+            />
+            <TextField
+              label="Password"
+              type={visible ? "text" : "password"}
+              name="password"
+              size="small"
+              onChange={formik.handleChange}
+              value={formik.values.password}
+              error={formik.touched.password && Boolean(formik.errors.password)}
+              helperText={formik.touched.password && formik.errors.password}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={showPassword}>
+                      {visible ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <TextField
+              label="Confirm Password"
+              size="small"
+              type={visible ? "text" : "password"}
+              name="password_confirmation"
+              onChange={formik.handleChange}
+              value={formik.values.password_confirmation}
+              error={
+                formik.touched.password_confirmation &&
+                Boolean(formik.errors.password_confirmation)
+              }
+              helperText={
+                formik.touched.password_confirmation &&
+                formik.errors.password_confirmation
+              }
+            />
+            <Button
+              variant="outlined"
+              // onClick={handleRegister}
+              type="submit"
+              disabled={isLoading ? true : false}
+            >
+              Register
+            </Button>
+          </Stack>
         </Stack>
       </Box>
     </Box>

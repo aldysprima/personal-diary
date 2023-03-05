@@ -13,7 +13,13 @@ export const authStore = create((set) => ({
   login: async (data, navigate, toast) => {
     set({ isLoading: true });
     try {
-      const response = await apiRepository.login(data);
+      // const response = await apiRepository.login(data);
+      const response = await Axios.post("/auth/login", data, {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      });
       console.log(response);
       set({ user: await response.data.user, isLoading: false });
       const token = await response.data.access_token;
@@ -28,7 +34,13 @@ export const authStore = create((set) => ({
   register: async (data, toast, navigate) => {
     set({ isLoading: true });
     try {
-      await apiRepository.register(data);
+      // await apiRepository.register(data);
+      await Axios.post("/auth/register", data, {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      });
       set({ isLoading: false });
       toast.success("Register Successful");
       navigate("/");
