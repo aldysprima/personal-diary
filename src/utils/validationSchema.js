@@ -19,3 +19,11 @@ export const validateRegister = yup.object({
     .required()
     .oneOf([yup.ref("password"), null], "Passwords must match"),
 });
+
+export const validateLogin = yup.object({
+  email: yup
+    .string("Enter your email")
+    .email("Email is invalid")
+    .required("Email is required"),
+  password: yup.string().required("Password cannot be empty"),
+});

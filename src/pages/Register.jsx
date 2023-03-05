@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useFormik } from "formik";
 import { validateRegister } from "../utils/validationSchema";
 import {
@@ -122,7 +122,6 @@ const Register = () => {
             />
             <Button
               variant="outlined"
-              // onClick={handleRegister}
               type="submit"
               disabled={isLoading ? true : false}
             >

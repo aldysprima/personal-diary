@@ -13,11 +13,22 @@ import {
 import { VisibilityOff, Visibility } from "@mui/icons-material";
 import { toast } from "react-toastify";
 import { authStore } from "../store";
+import { useFormik } from "formik";
+import { validateLogin } from "../utils/validationSchema";
 
 const Login = () => {
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validationSchema: validateLogin,
+    onSubmit: (values) => {
+      login(values, navigate, toast);
+    },
+  });
+
   const navigate = useNavigate();
-  const email = useRef();
-  const password = useRef();
 
   // import from global state
   const { isLoading, login } = authStore((state) => state);
@@ -29,16 +40,6 @@ const Login = () => {
     } else {
       setVisible(false);
     }
-  };
-
-  // Handle login
-  const handleLogin = () => {
-    const data = {
-      email: email.current.value,
-      password: password.current.value,
-    };
-
-    login(data, navigate, toast);
   };
 
   useEffect(() => {
@@ -81,34 +82,55 @@ const Login = () => {
           <Typography fontSize="30px" fontWeight={500}>
             Sign in to MyDiary
           </Typography>
-          <TextField label="Username/Email Address" inputRef={email} />
-          <TextField
-            label="Password"
-            type={visible ? "text" : "password"}
-            inputRef={password}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton onClick={showPassword}>
-                    {visible ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          />
-          <Button
-            variant="contained"
-            onClick={handleLogin}
-            sx={{
-              bgcolor: "#212B36",
-              "&:hover": {
-                backgroundColor: "#200B36",
-              },
-            }}
-            disabled={isLoading ? true : false}
-          >
-            {isLoading ? <CircularProgress /> : "login"}
-          </Button>
+          <Stack component="form" onSubmit={formik.handleSubmit} spacing={2}>
+            <TextField
+              label="Email Address"
+              name="email"
+              value={formik.values.email}
+              onChange={formik.handleChange}
+              error={formik.touched.email && Boolean(formik.errors.email)}
+              helperText={formik.touched.email && formik.errors.email}
+              placeholder="Email"
+              InputLabelProps={{
+                shrink: true,
+              }}
+            />
+            <TextField
+              InputLabelProps={{
+                shrink: true,
+              }}
+              label="Password"
+              placeholder="Password"
+              type={visible ? "text" : "password"}
+              name="password"
+              value={formik.values.password}
+              onChange={formik.handleChange}
+              error={formik.touched.password && Boolean(formik.errors.password)}
+              helperText={formik.touched.password && formik.errors.password}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={showPassword}>
+                      {visible ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <Button
+              variant="contained"
+              type="submit"
+              sx={{
+                bgcolor: "#212B36",
+                "&:hover": {
+                  backgroundColor: "#200B36",
+                },
+              }}
+              disabled={isLoading ? true : false}
+            >
+              {isLoading ? <CircularProgress /> : "login"}
+            </Button>
+          </Stack>
           <Typography>
             Don't have account yet? <Link to="/register">Sign Up</Link>
           </Typography>
