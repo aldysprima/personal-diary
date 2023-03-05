@@ -5,6 +5,7 @@ import {
   InputBase,
   Pagination,
   CircularProgress,
+  Typography,
 } from "@mui/material";
 import Navbar from "../components/Navbar";
 import Notes from "../components/Notes";
@@ -77,6 +78,17 @@ const NoteList = () => {
               }}
             />
           </Box>
+
+          {notes.length === 0 && !isLoading ? (
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              height="70vh"
+            >
+              <Typography>No Data(s)</Typography>
+            </Box>
+          ) : null}
 
           {isLoading ? (
             <Box

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import { validateRegister } from "../utils/validationSchema";
 import {
@@ -40,6 +40,13 @@ const Register = () => {
       setVisible(false);
     }
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem("userToken");
+    if (token) {
+      navigate("/note-list");
+    }
+  }, []);
 
   return (
     <Box

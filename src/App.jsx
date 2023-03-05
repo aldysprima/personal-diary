@@ -6,27 +6,35 @@ import Archived from "./pages/Archived";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import Register from "./pages/Register";
+import ProtectedPages from "./components/ProtectedPage";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Login />,
   },
-  {
-    path: "/note-list",
-    element: <NoteList />,
-  },
-  {
-    path: "/note-detail/:id",
-    element: <NoteDetail />,
-  },
+
   {
     path: "/register",
     element: <Register />,
   },
   {
-    path: "/archived",
-    element: <Archived />,
+    path: "/",
+    element: <ProtectedPages />,
+    children: [
+      {
+        path: "/note-list",
+        element: <NoteList />,
+      },
+      {
+        path: "/note-detail/:id",
+        element: <NoteDetail />,
+      },
+      {
+        path: "/archived",
+        element: <Archived />,
+      },
+    ],
   },
 ]);
 
