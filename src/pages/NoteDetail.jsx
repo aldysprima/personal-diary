@@ -9,12 +9,15 @@ import {
   Chip,
   IconButton,
   Tooltip,
+  CircularProgress,
 } from "@mui/material";
 import { Cancel, Edit, Save } from "@mui/icons-material";
 
 const NoteDetail = () => {
   const params = useParams();
-  const { fetchNotesById, updateNotes } = noteStore((state) => state);
+  const { fetchNotesById, updateNotes, isLoading } = noteStore(
+    (state) => state
+  );
   const [edit, setEdit] = useState(false);
   const [data, setData] = useState({});
 
@@ -41,7 +44,6 @@ const NoteDetail = () => {
     fetchNotesById(params.id, setData);
   }, []);
 
-  console.log(data);
   return (
     <Box
       display="flex"
@@ -49,104 +51,113 @@ const NoteDetail = () => {
       alignItems="center"
       height="100vh"
     >
-      <Stack
-        bgcolor="#ffffff"
-        padding="10px 20px"
-        borderRadius="10px"
-        spacing={4}
-        width="500px"
-      >
-        <Stack>
-          <Box display="flex" justifyContent="space-between">
-            {edit ? (
-              <TextField
-                size="small"
-                sx={{ marginBottom: "10px" }}
-                value={data.title}
-                onChange={handleChange}
-                name="title"
-              />
-            ) : (
-              <Typography fontWeight={500} fontSize="30px">
-                {data.title}
-              </Typography>
-            )}
-            <Box>
-              <Tooltip title={edit ? "Save" : "Edit"}>
-                <IconButton
-                  onClick={edit ? onConfirmEdit : () => setEdit(true)}
-                >
-                  {edit ? <Save /> : <Edit />}
-                </IconButton>
-              </Tooltip>
-              {edit && (
-                <Tooltip title="Cancel">
-                  <IconButton onClick={() => setEdit(false)}>
-                    <Cancel />
+      {isLoading ? (
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          height="70vh"
+        >
+          <CircularProgress size={60} />
+        </Box>
+      ) : (
+        <Stack
+          bgcolor="#ffffff"
+          padding="10px 20px"
+          borderRadius="10px"
+          spacing={4}
+          width="500px"
+        >
+          <Stack>
+            <Box display="flex" justifyContent="space-between">
+              {edit ? (
+                <TextField
+                  size="small"
+                  sx={{ marginBottom: "10px" }}
+                  value={data.title}
+                  onChange={handleChange}
+                  name="title"
+                />
+              ) : (
+                <Typography fontWeight={500} fontSize="30px">
+                  {data.title}
+                </Typography>
+              )}
+              <Box>
+                <Tooltip title={edit ? "Save" : "Edit"}>
+                  <IconButton
+                    onClick={edit ? onConfirmEdit : () => setEdit(true)}
+                  >
+                    {edit ? <Save /> : <Edit />}
                   </IconButton>
                 </Tooltip>
-              )}
+                {edit && (
+                  <Tooltip title="Cancel">
+                    <IconButton onClick={() => setEdit(false)}>
+                      <Cancel />
+                    </IconButton>
+                  </Tooltip>
+                )}
+              </Box>
             </Box>
-          </Box>
-          <Box>
-            <Chip
-              label={`Created:  ${new Date(data.created_at).toLocaleDateString(
-                "en",
-                {
+            <Box>
+              <Chip
+                label={`Created:  ${new Date(
+                  data.created_at
+                ).toLocaleDateString("en", {
                   month: "long",
                   day: "numeric",
                   year: "numeric",
                   hour: "numeric",
                   minute: "numeric",
-                }
-              )}`}
+                })}`}
+                size="small"
+                sx={{
+                  borderRadius: "5px",
+                  bgcolor: "#36A57D",
+                  color: "#ffffff",
+                }}
+              />
+            </Box>
+          </Stack>
+          {edit ? (
+            <TextField
               size="small"
-              sx={{
-                borderRadius: "5px",
-                bgcolor: "#36A57D",
-                color: "#ffffff",
-              }}
+              sx={{ marginBottom: "10px" }}
+              value={data.content}
+              onChange={handleChange}
+              name="content"
+              multiline
+              rows={5}
+              inputProps={{ maxLength: 500 }}
+              helperText="Maximum Characters 500"
             />
-          </Box>
+          ) : (
+            <Typography>{data.content}</Typography>
+          )}
+          {data.created_at === data.updated_at ? null : (
+            <Box display="flex" justifyContent="flex-end">
+              <Chip
+                label={`Updated:  ${new Date(
+                  data.updated_at
+                ).toLocaleDateString("en", {
+                  month: "long",
+                  day: "numeric",
+                  year: "numeric",
+                  hour: "numeric",
+                  minute: "numeric",
+                })}`}
+                size="small"
+                sx={{
+                  borderRadius: "5px",
+                  bgcolor: "#537FE7",
+                  color: "#ffffff",
+                }}
+              />
+            </Box>
+          )}
         </Stack>
-        {edit ? (
-          <TextField
-            size="small"
-            sx={{ marginBottom: "10px" }}
-            value={data.content}
-            onChange={handleChange}
-            name="content"
-            multiline
-            rows={5}
-            inputProps={{ maxLength: 500 }}
-            helperText="Maximum Characters 500"
-          />
-        ) : (
-          <Typography>{data.content}</Typography>
-        )}
-        {data.created_at === data.updated_at ? null : (
-          <Box display="flex" justifyContent="flex-end">
-            <Chip
-              label={`Updated:  ${new Date(data.updated_at).toLocaleDateString(
-                "en",
-                {
-                  month: "long",
-                  day: "numeric",
-                  year: "numeric",
-                  hour: "numeric",
-                  minute: "numeric",
-                }
-              )}`}
-              size="small"
-              sx={{
-                borderRadius: "5px",
-                bgcolor: "#537FE7",
-                color: "#ffffff",
-              }}
-            />
-          </Box>
-        )}
-      </Stack>
+      )}
     </Box>
   );
 };

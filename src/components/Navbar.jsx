@@ -51,7 +51,7 @@ function Navbar() {
     <AppBar position="sticky" sx={{ bgcolor: "#313638" }}>
       <StyledToolbar>
         <Typography variant="h4" fontWeight="bold">
-          JobLizt
+          Diaries
         </Typography>
         <Box
           display="flex"

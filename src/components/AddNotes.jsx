@@ -96,6 +96,7 @@ function AddPost() {
             name="content"
             onChange={handleChange}
             helperText="Maximum 500 Characters"
+            inputProps={{ maxLength: 500 }}
           />
           <Stack direction="row" gap={1} mt={2} mb={3}>
             <EmojiEmotions color="primary" />

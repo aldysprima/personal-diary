@@ -20,11 +20,9 @@ export const authStore = create((set) => ({
           Accept: "application/json",
         },
       });
-      console.log(response);
       set({ user: await response.data.user, isLoading: false });
       const token = await response.data.access_token;
       const userData = await response.data.user;
-      console.log(userData);
       localStorage.setItem("userData", JSON.stringify(userData));
       localStorage.setItem("userToken", token);
       navigate("/note-list");
@@ -49,7 +47,6 @@ export const authStore = create((set) => ({
       navigate("/");
     } catch (error) {
       set({ isLoading: false });
-      console.log(error);
       toast.error(error?.response?.data?.message);
     }
   },
