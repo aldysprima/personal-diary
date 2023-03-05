@@ -1,5 +1,11 @@
 import { useEffect, useState } from "react";
-import { Box, Grid, InputBase } from "@mui/material";
+import {
+  Box,
+  Grid,
+  InputBase,
+  Pagination,
+  CircularProgress,
+} from "@mui/material";
 import Navbar from "../components/Navbar";
 import Notes from "../components/Notes";
 import Sidebar from "../components/Sidebar";
@@ -9,7 +15,7 @@ import AddPost from "../components/AddNotes";
 import PopupConfirmation from "../components/PopupConfirmation";
 const NoteList = () => {
   const navigate = useNavigate();
-  const { notes, fetchNotes, isLoading, archieveNotes } = noteStore(
+  const { notes, fetchNotes, isLoading, archieveNotes, total_data } = noteStore(
     (state) => state
   );
   const [open, setOpen] = useState(false);
@@ -21,7 +27,6 @@ const NoteList = () => {
     setKeyword(e.target.value);
   };
 
-  console.log("KEYWORD :", keyword);
   //Handle Archieve feature
   const onClickArchieve = (id) => {
     setSelectedNoteId(id);
@@ -46,39 +51,61 @@ const NoteList = () => {
       <Box display="flex">
         <Sidebar />
         <Box flex={5} padding={4}>
-          <Box
-            bgcolor="white"
-            padding="0 10px"
-            borderRadius="10px"
-            border="1px solid #ACABAB"
-            sx={{
-              width: "470px",
-              maxWidth: "100%",
-              marginBottom: "20px",
-            }}
-          >
-            <InputBase
-              placeholder="Search By Diary Notes Title"
-              fullWidth
-              onChange={handleSearch}
+          <Box display="flex" justifyContent="space-between">
+            <Box
+              bgcolor="white"
+              padding="0 10px"
+              borderRadius="10px"
+              border="1px solid #ACABAB"
+              sx={{
+                width: "470px",
+                maxWidth: "100%",
+                marginBottom: "20px",
+              }}
+            >
+              <InputBase
+                placeholder="Search By Diary Notes Title"
+                fullWidth
+                onChange={handleSearch}
+              />
+            </Box>
+            <Pagination
+              count={Math.ceil(total_data / 10)}
+              color="primary"
+              onChange={(event, value) => {
+                fetchNotes(keyword, value);
+              }}
             />
           </Box>
-          <Grid container spacing={2}>
-            {notes
-              ? notes.map((note, index) => {
-                  return (
-                    <Notes
-                      key={index}
-                      title={note.title}
-                      timestamp={note.created_at}
-                      onClick={() => onClickDetail(note.id)}
-                      noteId={note.id}
-                      onClickArchieve={() => onClickArchieve(note.id)}
-                    />
-                  );
-                })
-              : null}
-          </Grid>
+
+          {isLoading ? (
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              height="70vh"
+            >
+              <CircularProgress size={60} />
+            </Box>
+          ) : (
+            <Grid container spacing={2}>
+              {notes
+                ? notes.map((note, index) => {
+                    return (
+                      <Notes
+                        key={index}
+                        title={note.title}
+                        timestamp={note.created_at}
+                        onClick={() => onClickDetail(note.id)}
+                        noteId={note.id}
+                        onClickArchieve={() => onClickArchieve(note.id)}
+                      />
+                    );
+                  })
+                : null}
+            </Grid>
+          )}
+
           <AddPost />
           <PopupConfirmation
             open={open}

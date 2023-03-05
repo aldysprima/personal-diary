@@ -18,12 +18,15 @@ const NoteDetail = () => {
   const [edit, setEdit] = useState(false);
   const [data, setData] = useState({});
 
+  //Capture new Value
   const handleChange = (e) => {
     setData({
       ...data,
       [e.target.name]: e.target.value,
     });
   };
+
+  //SUbmit Data
   const onConfirmEdit = () => {
     const dataToSubmit = {
       title: data.title,

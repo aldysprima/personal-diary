@@ -2,6 +2,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Login from "./pages/Login";
 import NoteList from "./pages/NoteList";
 import NoteDetail from "./pages/NoteDetail";
+import Archived from "./pages/Archived";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import Register from "./pages/Register";
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
   {
     path: "/register",
     element: <Register />,
+  },
+  {
+    path: "/archived",
+    element: <Archived />,
   },
 ]);
 

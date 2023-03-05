@@ -44,13 +44,21 @@ export const noteStore = create((set) => ({
   isLoading: false,
   notes: [],
   note: {},
-  fetchNotes: async (keyword) => {
+  total_data: 0,
+  fetchNotes: async (keyword, page = 1) => {
     set({ isLoading: true });
     try {
-      const response = await Axios.get(`/diary?search=${keyword}`, {
-        headers: generateHeadersConfig(),
+      const response = await Axios.get(
+        `/diary?search=${keyword}&page=${page}`,
+        {
+          headers: generateHeadersConfig(),
+        }
+      );
+      set({
+        notes: await response.data.data,
+        total_data: await response.data.total_data,
+        isLoading: false,
       });
-      set({ notes: await response.data.data, isLoading: false });
     } catch (error) {
       set({ isLoading: false });
       toast.error(

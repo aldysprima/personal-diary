@@ -51,8 +51,8 @@ function AddPost() {
     <>
       <Tooltip
         onClick={(e) => setOpen(true)}
-        title="Add Notes"
-        sx={{ position: "fixed", bottom: 50, right: 100 }}
+        title="Add Diary Notes"
+        sx={{ position: "fixed", bottom: 20, right: 100 }}
       >
         <Fab color="primary" aria-label="add">
           <Add />
