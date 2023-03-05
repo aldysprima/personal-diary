@@ -23,6 +23,9 @@ export const authStore = create((set) => ({
       console.log(response);
       set({ user: await response.data.user, isLoading: false });
       const token = await response.data.access_token;
+      const userData = await response.data.user;
+      console.log(userData);
+      localStorage.setItem("userData", JSON.stringify(userData));
       localStorage.setItem("userToken", token);
       navigate("/note-list");
       toast.success("Login Succeed");

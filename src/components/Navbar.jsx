@@ -25,6 +25,7 @@ const Icons = styled(Box)(({ theme }) => ({
 }));
 
 function Navbar() {
+  const userData = JSON.parse(localStorage.getItem("userData"));
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const divRef = useRef();
@@ -58,7 +59,7 @@ function Navbar() {
           justifyContent="space-between"
           width="220px"
         >
-          <Typography>Welcome, {user?.username}</Typography>
+          <Typography>Welcome, {userData?.username}</Typography>
           <Icons>
             <Avatar
               sx={{ cursor: "pointer" }}

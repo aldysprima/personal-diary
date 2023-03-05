@@ -38,6 +38,7 @@ function AddPost() {
   const { postNotes, isLoading, fetchNotes } = noteStore((state) => state);
   const [open, setOpen] = useState(false);
   const [data, setData] = useState({});
+  const userData = JSON.parse(localStorage.getItem("userData"));
   const handleChange = (e) => {
     setData({
       ...data,
@@ -74,7 +75,7 @@ function AddPost() {
               src="https://images.pexels.com/photos/846741/pexels-photo-846741.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
             />
             <Typography fontWeight={500} variant="span">
-              John Doe
+              {userData.username}
             </Typography>
           </UserBox>
           <TextField
