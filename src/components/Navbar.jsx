@@ -60,7 +60,12 @@ function Navbar() {
         >
           <Typography>Welcome, {user?.username}</Typography>
           <Icons>
-            <Avatar sx={{ cursor: "pointer" }} onClick={onOpen} ref={divRef} />
+            <Avatar
+              sx={{ cursor: "pointer" }}
+              onClick={onOpen}
+              ref={divRef}
+              src="https://images.pexels.com/photos/846741/pexels-photo-846741.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+            />
           </Icons>
         </Box>
       </StyledToolbar>

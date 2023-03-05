@@ -2,6 +2,7 @@ import { MoreHoriz } from "@mui/icons-material";
 import {
   Box,
   Chip,
+  Grid,
   IconButton,
   Menu,
   MenuItem,
@@ -21,50 +22,52 @@ const Notes = ({ title, timestamp, onClick, noteId, onClickArchieve }) => {
     setAnchorEl(null);
   };
   return (
-    <Paper
-      elevation={1}
-      sx={{
-        bgcolor: "#ffffff",
-        maxWidth: "200px",
-        padding: "20px 20px",
-      }}
-    >
-      <Typography
-        fontWeight={500}
-        marginBottom="30px"
-        onClick={onClick}
+    <Grid item xs={3}>
+      <Paper
+        elevation={1}
         sx={{
-          cursor: "pointer",
+          bgcolor: "#ffffff",
+          maxWidth: "200px",
+          padding: "20px 20px",
         }}
       >
-        {title}
-      </Typography>
-      <Box display="flex" justifyContent="space-between">
-        <Chip
-          label={new Date(timestamp).toLocaleDateString("en", {
-            month: "long",
-            day: "numeric",
-            year: "numeric",
-            hour: "numeric",
-            minute: "numeric",
-          })}
-          sx={{ borderRadius: "5px", bgcolor: "#36A57D", color: "#ffffff" }}
-        />
-        <IconButton onClick={handleClick}>
-          <MoreHoriz />
-        </IconButton>
-        <Menu
-          anchorEl={anchorEl}
-          open={open}
-          onClose={handleClose}
-          MenuListProps={{
-            "aria-labelledby": "basic-button",
+        <Typography
+          fontWeight={500}
+          marginBottom="30px"
+          onClick={onClick}
+          sx={{
+            cursor: "pointer",
           }}
         >
-          <MenuItem onClick={onClickArchieve}>Archieve</MenuItem>
-        </Menu>
-      </Box>
-    </Paper>
+          {title}
+        </Typography>
+        <Box display="flex" justifyContent="space-between">
+          <Chip
+            label={new Date(timestamp).toLocaleDateString("en", {
+              month: "long",
+              day: "numeric",
+              year: "numeric",
+              hour: "numeric",
+              minute: "numeric",
+            })}
+            sx={{ borderRadius: "5px", bgcolor: "#36A57D", color: "#ffffff" }}
+          />
+          <IconButton onClick={handleClick}>
+            <MoreHoriz />
+          </IconButton>
+          <Menu
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            MenuListProps={{
+              "aria-labelledby": "basic-button",
+            }}
+          >
+            <MenuItem onClick={onClickArchieve}>Archieve</MenuItem>
+          </Menu>
+        </Box>
+      </Paper>
+    </Grid>
   );
 };
 

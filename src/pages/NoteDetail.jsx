@@ -8,8 +8,9 @@ import {
   TextField,
   Chip,
   IconButton,
+  Tooltip,
 } from "@mui/material";
-import { Edit, Save } from "@mui/icons-material";
+import { Cancel, Edit, Save } from "@mui/icons-material";
 
 const NoteDetail = () => {
   const params = useParams();
@@ -67,10 +68,22 @@ const NoteDetail = () => {
                 {data.title}
               </Typography>
             )}
-
-            <IconButton onClick={edit ? onConfirmEdit : () => setEdit(true)}>
-              {edit ? <Save /> : <Edit />}
-            </IconButton>
+            <Box>
+              <Tooltip title={edit ? "Save" : "Edit"}>
+                <IconButton
+                  onClick={edit ? onConfirmEdit : () => setEdit(true)}
+                >
+                  {edit ? <Save /> : <Edit />}
+                </IconButton>
+              </Tooltip>
+              {edit && (
+                <Tooltip title="Cancel">
+                  <IconButton onClick={() => setEdit(false)}>
+                    <Cancel />
+                  </IconButton>
+                </Tooltip>
+              )}
+            </Box>
           </Box>
           <Box>
             <Chip

@@ -10,6 +10,7 @@ import {
   Avatar,
   Box,
   Button,
+  CircularProgress,
   Fab,
   Modal,
   Stack,
@@ -68,7 +69,10 @@ function AddPost() {
             Create New Diary Notes
           </Typography>
           <UserBox>
-            <Avatar src="" sx={{ width: 30, height: 30 }} />
+            <Avatar
+              sx={{ width: 30, height: 30 }}
+              src="https://images.pexels.com/photos/846741/pexels-photo-846741.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+            />
             <Typography fontWeight={500} variant="span">
               John Doe
             </Typography>
@@ -90,6 +94,7 @@ function AddPost() {
             variant="standard"
             name="content"
             onChange={handleChange}
+            helperText="Maximum 500 Characters"
           />
           <Stack direction="row" gap={1} mt={2} mb={3}>
             <EmojiEmotions color="primary" />
@@ -98,8 +103,13 @@ function AddPost() {
             <PersonAdd color="error" />
           </Stack>
 
-          <Button variant="contained" fullWidth onClick={onBtnSubmit}>
-            Post
+          <Button
+            variant="contained"
+            fullWidth
+            onClick={onBtnSubmit}
+            disabled={isLoading ? true : false}
+          >
+            {isLoading ? <CircularProgress /> : "Submit"}
           </Button>
         </Box>
       </StyledModal>

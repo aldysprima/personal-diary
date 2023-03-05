@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Box } from "@mui/material";
+import { Box, Grid, InputBase } from "@mui/material";
 import Navbar from "../components/Navbar";
 import Notes from "../components/Notes";
 import Sidebar from "../components/Sidebar";
@@ -14,7 +14,14 @@ const NoteList = () => {
   );
   const [open, setOpen] = useState(false);
   const [selectedNoteId, setSelectedNoteId] = useState("");
+  const [keyword, setKeyword] = useState("");
 
+  // Handle Search
+  const handleSearch = (e) => {
+    setKeyword(e.target.value);
+  };
+
+  console.log("KEYWORD :", keyword);
   //Handle Archieve feature
   const onClickArchieve = (id) => {
     setSelectedNoteId(id);
@@ -30,8 +37,8 @@ const NoteList = () => {
   };
 
   useEffect(() => {
-    fetchNotes();
-  }, []);
+    fetchNotes(keyword);
+  }, [keyword]);
 
   return (
     <>
@@ -39,20 +46,39 @@ const NoteList = () => {
       <Box display="flex">
         <Sidebar />
         <Box flex={5} padding={4}>
-          {notes
-            ? notes.map((note, index) => {
-                return (
-                  <Notes
-                    key={index}
-                    title={note.title}
-                    timestamp={note.created_at}
-                    onClick={() => onClickDetail(note.id)}
-                    noteId={note.id}
-                    onClickArchieve={() => onClickArchieve(note.id)}
-                  />
-                );
-              })
-            : null}
+          <Box
+            bgcolor="white"
+            padding="0 10px"
+            borderRadius="10px"
+            border="1px solid #ACABAB"
+            sx={{
+              width: "470px",
+              maxWidth: "100%",
+              marginBottom: "20px",
+            }}
+          >
+            <InputBase
+              placeholder="Search By Diary Notes Title"
+              fullWidth
+              onChange={handleSearch}
+            />
+          </Box>
+          <Grid container spacing={2}>
+            {notes
+              ? notes.map((note, index) => {
+                  return (
+                    <Notes
+                      key={index}
+                      title={note.title}
+                      timestamp={note.created_at}
+                      onClick={() => onClickDetail(note.id)}
+                      noteId={note.id}
+                      onClickArchieve={() => onClickArchieve(note.id)}
+                    />
+                  );
+                })
+              : null}
+          </Grid>
           <AddPost />
           <PopupConfirmation
             open={open}
