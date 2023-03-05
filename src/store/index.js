@@ -83,7 +83,7 @@ export const noteStore = create((set) => ({
       );
     }
   },
-  updateNotes: async (noteId, data, setEdit) => {
+  updateNotes: async (noteId, data, setEdit, fetchNotesById, setData) => {
     set({ isLoading: true });
     try {
       await Axios.put(`/diary/${noteId}`, data, {
@@ -92,6 +92,7 @@ export const noteStore = create((set) => ({
       set({ isLoading: false });
       toast.success("Successfully Updated");
       setEdit(false);
+      fetchNotesById(noteId, setData);
     } catch (error) {
       set({ isLoading: false });
       toast.error(

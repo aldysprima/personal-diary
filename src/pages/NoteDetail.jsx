@@ -32,7 +32,7 @@ const NoteDetail = () => {
       title: data.title,
       content: data.content,
     };
-    updateNotes(params.id, dataToSubmit, setEdit);
+    updateNotes(params.id, dataToSubmit, setEdit, fetchNotesById, setData);
   };
 
   // fn to trigger edit
